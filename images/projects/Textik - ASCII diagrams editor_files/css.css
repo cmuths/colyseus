@@ -1,0 +1,1100 @@
+/* BASICS */
+
+.CodeMirror {
+  /* Set height, width, borders, and global font properties here */
+  font-family: monospace;
+  height: 300px;
+}
+
+.CodeMirror-scroll {
+  /* Set scrolling behaviour here */
+  overflow: auto;
+}
+
+/* PADDING */
+
+.CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  background-color: white; /* The little square between H and V scrollbars */
+}
+
+/* GUTTER */
+
+.CodeMirror-gutters {
+  border-right: 1px solid #ddd;
+  background-color: #f7f7f7;
+  white-space: nowrap;
+}
+
+.CodeMirror-linenumbers {}
+
+.CodeMirror-linenumber {
+  padding: 0 3px 0 5px;
+  min-width: 20px;
+  text-align: right;
+  color: #999;
+  box-sizing: content-box;
+}
+
+/* CURSOR */
+
+.CodeMirror div.CodeMirror-cursor {
+  border-left: 1px solid black;
+}
+
+/* Shown when moving in bi-directional text */
+
+.CodeMirror div.CodeMirror-secondarycursor {
+  border-left: 1px solid silver;
+}
+
+.CodeMirror.cm-keymap-fat-cursor div.CodeMirror-cursor {
+  width: auto;
+  border: 0;
+  background: #7e7;
+}
+
+/* Can style cursor different in overwrite (non-insert) mode */
+
+div.CodeMirror-overwrite div.CodeMirror-cursor {}
+
+.cm-tab { display: inline-block; }
+
+.CodeMirror-ruler {
+  border-left: 1px solid #ccc;
+  position: absolute;
+}
+
+/* DEFAULT THEME */
+
+.cm-s-default .cm-keyword {color: #708;}
+
+.cm-s-default .cm-atom {color: #219;}
+
+.cm-s-default .cm-number {color: #164;}
+
+.cm-s-default .cm-def {color: #00f;}
+
+.cm-s-default .cm-variable, .cm-s-default .cm-punctuation, .cm-s-default .cm-property, .cm-s-default .cm-operator {}
+
+.cm-s-default .cm-variable-2 {color: #05a;}
+
+.cm-s-default .cm-variable-3 {color: #085;}
+
+.cm-s-default .cm-comment {color: #a50;}
+
+.cm-s-default .cm-string {color: #a11;}
+
+.cm-s-default .cm-string-2 {color: #f50;}
+
+.cm-s-default .cm-meta {color: #555;}
+
+.cm-s-default .cm-qualifier {color: #555;}
+
+.cm-s-default .cm-builtin {color: #30a;}
+
+.cm-s-default .cm-bracket {color: #997;}
+
+.cm-s-default .cm-tag {color: #170;}
+
+.cm-s-default .cm-attribute {color: #00c;}
+
+.cm-s-default .cm-header {color: blue;}
+
+.cm-s-default .cm-quote {color: #090;}
+
+.cm-s-default .cm-hr {color: #999;}
+
+.cm-s-default .cm-link {color: #00c;}
+
+.cm-negative {color: #d44;}
+
+.cm-positive {color: #292;}
+
+.cm-header, .cm-strong {font-weight: bold;}
+
+.cm-em {font-style: italic;}
+
+.cm-link {text-decoration: underline;}
+
+.cm-s-default .cm-error {color: #f00;}
+
+.cm-invalidchar {color: #f00;}
+
+div.CodeMirror span.CodeMirror-matchingbracket {color: #0f0;}
+
+div.CodeMirror span.CodeMirror-nonmatchingbracket {color: #f22;}
+
+.CodeMirror-activeline-background {background: #e8f2ff;}
+
+/* STOP */
+
+/* The rest of this file contains styles related to the mechanics of
+   the editor. You probably shouldn't touch them. */
+
+.CodeMirror {
+  line-height: 1;
+  position: relative;
+  overflow: hidden;
+  background: white;
+  color: black;
+}
+
+.CodeMirror-scroll {
+  /* 30px is the magic margin used to hide the element's real scrollbars */
+  /* See overflow: hidden in .CodeMirror */
+  margin-bottom: -30px; margin-right: -30px;
+  padding-bottom: 30px;
+  height: 100%;
+  outline: none; /* Prevent dragging from highlighting the element */
+  position: relative;
+  box-sizing: content-box;
+}
+
+.CodeMirror-sizer {
+  position: relative;
+  border-right: 30px solid transparent;
+  box-sizing: content-box;
+}
+
+/* The fake, visible scrollbars. Used to force redraw during scrolling
+   before actuall scrolling happens, thus preventing shaking and
+   flickering artifacts. */
+
+.CodeMirror-vscrollbar, .CodeMirror-hscrollbar, .CodeMirror-scrollbar-filler, .CodeMirror-gutter-filler {
+  position: absolute;
+  z-index: 6;
+  display: none;
+}
+
+.CodeMirror-vscrollbar {
+  right: 0; top: 0;
+  overflow-x: hidden;
+  overflow-y: scroll;
+}
+
+.CodeMirror-hscrollbar {
+  bottom: 0; left: 0;
+  overflow-y: hidden;
+  overflow-x: scroll;
+}
+
+.CodeMirror-scrollbar-filler {
+  right: 0; bottom: 0;
+}
+
+.CodeMirror-gutter-filler {
+  left: 0; bottom: 0;
+}
+
+.CodeMirror-gutters {
+  position: absolute; left: 0; top: 0;
+  padding-bottom: 30px;
+  z-index: 3;
+}
+
+.CodeMirror-gutter {
+  white-space: normal;
+  height: 100%;
+  box-sizing: content-box;
+  padding-bottom: 30px;
+  margin-bottom: -32px;
+  display: inline-block;
+  /* Hack to make IE7 behave */
+  *zoom:1;
+  *display:inline;
+}
+
+.CodeMirror-gutter-elt {
+  position: absolute;
+  cursor: default;
+  z-index: 4;
+}
+
+.CodeMirror-lines {
+  cursor: text;
+}
+
+.CodeMirror pre {
+  /* Reset some styles that the rest of the page might have set */ border-radius: 0;
+  border-width: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: inherit;
+  margin: 0;
+  white-space: pre;
+  word-wrap: normal;
+  line-height: inherit;
+  color: inherit;
+  z-index: 2;
+  position: relative;
+  overflow: visible;
+}
+
+.CodeMirror-wrap pre {
+  word-wrap: break-word;
+  white-space: pre-wrap;
+  word-break: normal;
+}
+
+.CodeMirror-linebackground {
+  position: absolute;
+  left: 0; right: 0; top: 0; bottom: 0;
+  z-index: 0;
+}
+
+.CodeMirror-linewidget {
+  position: relative;
+  z-index: 2;
+  overflow: auto;
+}
+
+.CodeMirror-widget {}
+
+.CodeMirror-wrap .CodeMirror-scroll {
+  overflow-x: hidden;
+}
+
+.CodeMirror-measure {
+  position: absolute;
+  width: 100%;
+  height: 0;
+  overflow: hidden;
+  visibility: hidden;
+}
+
+.CodeMirror-measure pre { position: static; }
+
+.CodeMirror div.CodeMirror-cursor {
+  position: absolute;
+  border-right: none;
+  width: 0;
+}
+
+div.CodeMirror-cursors {
+  visibility: hidden;
+  position: relative;
+  z-index: 1;
+}
+
+.CodeMirror-focused div.CodeMirror-cursors {
+  visibility: visible;
+}
+
+.CodeMirror-selected { background: #d9d9d9; }
+
+.CodeMirror-focused .CodeMirror-selected { background: #d7d4f0; }
+
+.CodeMirror-crosshair { cursor: crosshair; }
+
+.cm-searching {
+  background: #ffa;
+  background: rgba(255, 255, 0, .4);
+}
+
+/* IE7 hack to prevent it from returning funny offsetTops on the spans */
+
+.CodeMirror span { *vertical-align: text-bottom; }
+
+/* Used to force a border model for a node */
+
+.cm-force-border { padding-right: .1px; }
+
+@media print {
+  /* Hide the cursor when printing */
+  .CodeMirror div.CodeMirror-cursors {
+    visibility: hidden;
+  }
+}
+
+* {
+  margin: 0;
+  padding: 0;
+}
+
+html, body {
+  width: 100%;
+  height: 100%;
+  font-size: 100%;
+  line-height: 1.2em;
+  letter-spacing: 0;
+}
+
+#app {
+  width: 100%;
+  height: 100%;
+}
+
+#text-editor {
+  position: absolute;
+  display: none;
+  padding: 2px;
+}
+
+#text-editor.is-visible {
+  display: block;
+}
+
+#text-editor.is-shape {
+}
+
+.calculate-letter-size {
+  font-family: monospace;
+  height: auto;
+  width: auto;
+  top: -10000px;
+  left: -10000px;
+  visibility: hidden;
+  position: fixed;
+  overflow: visible;
+  white-space: nowrap;
+  line-height: 1.2em;
+  letter-spacing: 0;
+}
+
+.canvas--content--item {
+  font-size: 1em;
+  line-height: 1.2em;
+}
+
+.canvas--content--item--text-wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
+}
+
+.canvas--content--item--text {
+  position: absolute;
+  margin-left: 1px;
+  margin-top: 1px;
+}
+
+.project.is-hover, .project.is-hover .canvas--content--item {
+  cursor: pointer;
+}
+
+.project.is-able-to-move, .project.is-able-to-move .canvas--content--item {
+  cursor: move;
+}
+
+.project.is-text, .project.is-text .canvas--content--item {
+  cursor: text;
+}
+
+.project {
+  margin-top: -1px;
+  border: solid #eee;
+  border-width: 1px 0 1px 1px;
+  overflow: auto;
+  position: absolute;
+  top: 3em;
+  left: 5em;
+  right: 0;
+  bottom: 2em;
+}
+
+body, .canvas, .selection, .selection--dot {
+  -webkit-touch-callout: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+
+.current-selection {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid gray;
+}
+
+.canvas {
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
+  box-sizing: border-box;
+  border: 1px solid #eee;
+}
+
+.canvas--content {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.canvas--content--item {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  cursor: default;
+}
+
+.canvas--content--item.is-hover {
+  color: red;
+}
+
+.canvas--content--item.is-selected {
+  color: blue;
+}
+
+.canvas--content--item.is-hidden {
+  visibility: hidden;
+}
+
+.canvas--content--item--z-index {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  background: rgba(252, 250, 247, .9);
+  width: 1.5em;
+  height: 1.5em;
+  color: green;
+  border: 1px solid rgba(248, 242, 228, .5);
+  margin-left: -0.75em;
+  margin-top: -0.75em;
+  text-align: center;
+  line-height: 1.5em;
+}
+
+.selection {
+  position: absolute;
+  pointer-events: none;
+  border: 1px solid gray;
+}
+
+.selection--dot {
+  position: absolute;
+  background: white;
+  width: 5px;
+  height: 5px;
+  border: 1px solid gray;
+  margin-left: -3px;
+  margin-top: -3px;
+  pointer-events: auto;
+}
+
+.selection--dot__nw {
+  top: 0;
+  left: 0;
+  margin-left: -4px;
+  margin-top: -4px;
+  cursor: nwse-resize;
+}
+
+.selection--dot__n {
+  top: 0;
+  left: 50%;
+  margin-left: -4px;
+  margin-top: -4px;
+  cursor: ns-resize;
+}
+
+.selection--dot__ne {
+  top: 0;
+  left: 100%;
+  margin-top: -4px;
+  cursor: nesw-resize;
+}
+
+.selection--dot__w {
+  top: 50%;
+  left: 0;
+  margin-left: -4px;
+  margin-top: -4px;
+  cursor: ew-resize;
+}
+
+.selection--dot__e {
+  top: 50%;
+  left: 100%;
+  cursor: ew-resize;
+}
+
+.selection--dot__sw {
+  top: 100%;
+  left: 0;
+  cursor: nesw-resize;
+}
+
+.selection--dot__s {
+  top: 100%;
+  left: 50%;
+  cursor: ns-resize;
+}
+
+.selection--dot__se {
+  top: 100%;
+  left: 100%;
+  cursor: nwse-resize;
+}
+
+.selection__text .selection--dot {
+  display: none;
+}
+
+.selection__line, .selection__rectline {
+  border: none;
+}
+
+.selection__line .selection--dot__n, .selection__line .selection--dot__ne, .selection__line .selection--dot__e, .selection__line .selection--dot__s, .selection__line .selection--dot__sw, .selection__line .selection--dot__w, .selection__line.is-flipped-x.is-flipped-y .selection--dot__n, .selection__line.is-flipped-x.is-flipped-y .selection--dot__ne, .selection__line.is-flipped-x.is-flipped-y .selection--dot__e, .selection__line.is-flipped-x.is-flipped-y .selection--dot__s, .selection__line.is-flipped-x.is-flipped-y .selection--dot__sw, .selection__line.is-flipped-x.is-flipped-y .selection--dot__w, .selection__rectline .selection--dot__n, .selection__rectline .selection--dot__ne, .selection__rectline .selection--dot__e, .selection__rectline .selection--dot__s, .selection__rectline .selection--dot__sw, .selection__rectline .selection--dot__w, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__n, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__ne, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__e, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__s, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__sw, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__w {
+  display: none;
+}
+
+.selection__line .selection--dot__nw, .selection__line .selection--dot__se, .selection__line.is-flipped-x.is-flipped-y .selection--dot__nw, .selection__line.is-flipped-x.is-flipped-y .selection--dot__se, .selection__rectline .selection--dot__nw, .selection__rectline .selection--dot__se, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__nw, .selection__rectline.is-flipped-x.is-flipped-y .selection--dot__se {
+  display: block;
+  cursor: pointer !important;
+}
+
+.selection__line.is-flipped-x .selection--dot__n, .selection__line.is-flipped-x .selection--dot__nw, .selection__line.is-flipped-x .selection--dot__e, .selection__line.is-flipped-x .selection--dot__s, .selection__line.is-flipped-x .selection--dot__se, .selection__line.is-flipped-x .selection--dot__w, .selection__line.is-flipped-y .selection--dot__n, .selection__line.is-flipped-y .selection--dot__nw, .selection__line.is-flipped-y .selection--dot__e, .selection__line.is-flipped-y .selection--dot__s, .selection__line.is-flipped-y .selection--dot__se, .selection__line.is-flipped-y .selection--dot__w, .selection__rectline.is-flipped-x .selection--dot__n, .selection__rectline.is-flipped-x .selection--dot__nw, .selection__rectline.is-flipped-x .selection--dot__e, .selection__rectline.is-flipped-x .selection--dot__s, .selection__rectline.is-flipped-x .selection--dot__se, .selection__rectline.is-flipped-x .selection--dot__w, .selection__rectline.is-flipped-y .selection--dot__n, .selection__rectline.is-flipped-y .selection--dot__nw, .selection__rectline.is-flipped-y .selection--dot__e, .selection__rectline.is-flipped-y .selection--dot__s, .selection__rectline.is-flipped-y .selection--dot__se, .selection__rectline.is-flipped-y .selection--dot__w {
+  display: none;
+}
+
+.selection__line.is-flipped-x .selection--dot__ne, .selection__line.is-flipped-x .selection--dot__sw, .selection__line.is-flipped-y .selection--dot__ne, .selection__line.is-flipped-y .selection--dot__sw, .selection__rectline.is-flipped-x .selection--dot__ne, .selection__rectline.is-flipped-x .selection--dot__sw, .selection__rectline.is-flipped-y .selection--dot__ne, .selection__rectline.is-flipped-y .selection--dot__sw {
+  display: block;
+  cursor: pointer !important;
+}
+
+.selection__line .selection--dot, .selection__rectline .selection--dot {
+  width: 10px;
+  height: 10px;
+  border: 1px solid gray;
+  margin-left: -6px;
+  margin-top: -6px;
+  pointer-events: auto;
+  border-radius: 5px;
+  background: gray;
+  opacity: 0.7;
+}
+
+.selection__line .selection--dot__se, .selection__rectline .selection--dot__se {
+  margin-top: -12px;
+  margin-left: -10px;
+}
+
+.selection__line .selection--dot__nw, .selection__rectline .selection--dot__nw {
+  margin-top: 2px;
+  margin-left: -2px;
+}
+
+.selection__line.is-flipped-x .selection--dot__sw, .selection__rectline.is-flipped-x .selection--dot__sw, .selection__line.is-flipped-y .selection--dot__sw, .selection__rectline.is-flipped-y .selection--dot__sw {
+  margin-top: -12px;
+  margin-left: -2px;
+}
+
+.selection__line.is-flipped-x .selection--dot__ne, .selection__rectline.is-flipped-x .selection--dot__ne, .selection__line.is-flipped-y .selection--dot__ne, .selection__rectline.is-flipped-y .selection--dot__ne {
+  margin-left: -10px;
+  margin-top: 2px;
+}
+
+.tool {
+  position: fixed;
+  right: 0;
+  bottom: 0;
+}
+
+.text {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.text--wrapper {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  text-align: left;
+  box-sizing: border-box;
+}
+
+.text--wrapper--content {
+  word-wrap: break-word;
+  display: inline-block;
+  max-width: 100%;
+}
+
+.text--wrapper--content--line {
+  background: white;
+  white-space: normal;
+}
+
+.canvas-content--item__text .text--wrapper {
+  padding: 0 !important;
+  width: auto;
+  height: auto;
+}
+
+.canvas-content--item__text .text--wrapper--content {
+  word-wrap: initial;
+  text-align: left;
+  margin-top: 0 !important;
+}
+
+.CodeMirror {
+  height: auto;
+  background: transparent;
+  border: none;
+  pointer-events: none;
+  line-height: 1.2em;
+  text-align: left;
+  padding-right: 1px;
+  max-width: none !important;
+}
+
+.CodeMirror-code span {
+  background: transparent;
+}
+
+.CodeMirror-scroll {
+  overflow-y: hidden;
+  height: auto;
+}
+
+div.CodeMirror-cursors {
+  z-index: 3;
+}
+
+.sidebar {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 5em;
+  background: #f8f8f8;
+  border-right: gray;
+}
+
+.sidebar--logo {
+  font-family: Arial, sans-serif;
+  padding: 0.5em;
+  font-size: 1.3em;
+  font-weight: bold;
+  text-align: center;
+}
+
+.button {
+  background: #e6e6e6;
+  border: 1px solid gray;
+  cursor: pointer;
+  outline: none;
+}
+
+.button:hover {
+  background: silver;
+}
+
+.button:active, .button.is-selected:hover, .button.is-selected {
+  background: silver;
+  box-shadow: 0 0 1em gray;
+}
+
+.button[disabled] {
+  background: #e6e6e6;
+  border: 1px solid gray;
+  box-shadow: none;
+  cursor: default;
+  opacity: 0.6;
+}
+
+.button__text {
+  width: auto;
+  padding: 0 1em;
+  text-transform: uppercase;
+}
+
+.button--icon {
+  display: block;
+  width: 100%;
+  height: 100%;
+  background-size: 70% 70%;
+  background-position: center center;
+  background-repeat: no-repeat;
+}
+
+.sidebar--tools--button {
+  display: block;
+  width: 4em;
+  height: 4em;
+  margin: 0.5em auto;
+}
+
+.sidebar--tools--button__select .sidebar--tools--button--icon {
+  background-image: url(../images/select.png)
+}
+
+.sidebar--tools--button__line .sidebar--tools--button--icon {
+  background-image: url(../images/line.png)
+}
+
+.sidebar--tools--button__rect-line .sidebar--tools--button--icon {
+  background-image: url(../images/rect-line.png)
+}
+
+.sidebar--tools--button__rect .sidebar--tools--button--icon {
+  background-image: url(../images/rect.png)
+}
+
+.sidebar--tools--button__undo .sidebar--tools--button--icon {
+  background-image: url(../images/undo.png)
+}
+
+.sidebar--tools--button__redo .sidebar--tools--button--icon {
+  background-image: url(../images/redo.png)
+}
+
+.sidebar--tools--button__text .sidebar--tools--button--icon {
+  background-image: url(../images/text.png)
+}
+
+.sidebar--tools--button__result .sidebar--tools--button--icon {
+  background-image: url(../images/result.png)
+}
+
+.sidebar--tools--button__delete .sidebar--tools--button--icon {
+  background-image: url(../images/delete.png)
+}
+
+.my-projects, .result {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 2;
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
+  -webkit-box-align: center;
+      -ms-flex-align: center;
+          align-items: center;
+  -webkit-box-pack: center;
+      -ms-flex-pack: center;
+          justify-content: center;
+}
+
+.result-enter {
+  opacity: 0;
+}
+
+.result-enter-active {
+  opacity: 1;
+  transition: opacity 0.1s ease-in;
+  -webkit-transition: opacity 0.1s ease-in;
+  -moz-transition: opacity 0.1s ease-in;
+}
+
+.result-leave {
+  opacity: 1;
+}
+
+.result-leave-active {
+  transition: opacity 0.1s ease-in;
+  -webkit-transition: opacity 0.1s ease-in;
+  -moz-transition: opacity 0.1s ease-in;
+  opacity: 0;
+}
+
+.my-projects--overlay, .result--overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #1d2226;
+  opacity: 0.9;
+}
+
+.my-projects--popup, .result--popup {
+  position: relative;
+  z-index: 1;
+  background: #f5f5f5;
+  border-radius: 3px;
+}
+
+.result--content {
+  margin: 2.5em 1.5em 1em;
+  background: white;
+  border: #eee;
+}
+
+.result--content--pre {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+  overflow: hidden;
+  line-height: 1.2em;
+}
+
+.my-projects--close-top, .result--close-top {
+  position: absolute;
+  top: 1em;
+  right: 1em;
+  width: 2em;
+  height: 2em;
+  background-size: 100% 100%;
+  background-position: center center;
+  background-repeat: no-repeat;
+  background-color: transparent;
+  background-image: url(../images/close.png);
+  border: none;
+  cursor: pointer;
+  outline: none;
+}
+
+.result--bottom {
+  text-align: center;
+  padding-bottom: 1em;
+}
+
+.result--bottom--hint {
+  font-size: 0.8em;
+  padding: 0 1em 1em 1em;
+}
+
+.result--bottom--close {
+  background: #e6e6e6;
+  padding: 0.5em 1em;
+  border: 1px solid gray;
+  cursor: pointer;
+  outline: none;
+  font-size: 1.2em;
+}
+
+.my-projects--project--result {
+  -webkit-user-select: text;
+  -moz-user-select: text;
+  -ms-user-select: text;
+  -o-user-select: text;
+  user-select: text;
+  width: 7em;
+  height: 7em;
+  position: relative;
+}
+
+.my-projects--content {
+  background: white;
+  border: #eee;
+  padding: 1.5em 2em 0.5em;
+  max-width: 28em;
+  max-height: 28em;
+  overflow: auto;
+  float: left;
+  border-radius: 3px;
+}
+
+.my-projects--project {
+  width: 7em;
+  float: left;
+  height: 9em;
+  padding: 1em;
+}
+
+.my-projects--project--delete {
+  text-align: center;
+  font-size: 0.8em;
+  color: red;
+  cursor: pointer;
+}
+
+.my-projects--project--result--content {
+  -webkit-transform-origin: top left;
+          transform-origin: top left;
+  position: absolute;
+  top: 0;
+  left: 0;
+}
+
+.my-projects--project--name {
+  text-align: center;
+}
+
+.my-projects--project--name a {
+  color: #0074D9;
+  text-decoration: none;
+  margin: 0 0.5em;
+  cursor: pointer;
+}
+
+.outlets {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.outlets--point {
+  position: absolute;
+  width: 10px;
+  height: 10px;
+  border-radius: 5px;
+  margin-top: 2px;
+  margin-left: -2px;
+  border: 1px solid silver;
+}
+
+.topbar {
+  position: absolute;
+  left: 5em;
+  top: 0;
+  height: 3em;
+  right: 0;
+  background: #f8f8f8;
+  z-index: 1;
+}
+
+.topbar--left {
+  float: left;
+}
+
+.topbar--right {
+  float: right;
+  line-height: 3em;
+  padding-right: 1em;
+}
+
+.topbar--right--login, .topbar--right--logout {
+  color: #0074D9;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.topbar--right--account {
+  display: inline-block;
+  line-height: 1.2em;
+  vertical-align: middle;
+}
+
+.topbar--right--account--projects {
+  color: #0074D9;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.topbar--right--account--email {
+  padding-right: 1em;
+  font-size: 0.8em;
+}
+
+.topbar--button {
+  display: inline-block;
+  height: 3em;
+  margin: 0.5em;
+  vertical-align: top;
+}
+
+.topbar--button__icon {
+  width: 3em;
+}
+
+.topbar--button__z-inc .topbar--button--icon {
+  background-image: url(../images/z-inc.png)
+}
+
+.topbar--button__z-dec .topbar--button--icon {
+  background-image: url(../images/z-dec.png)
+}
+
+.topbar--button__grid .topbar--button--icon {
+  background-image: url(../images/grid.png)
+}
+
+.grid {
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: none;
+}
+
+.grid.is-visible {
+  display: block;
+}
+
+.bottombar {
+  position: absolute;
+  left: 5em;
+  bottom: 0;
+  height: 2em;
+  right: 0;
+  background: #f8f8f8;
+  line-height: 2em;
+}
+
+.bottombar a {
+  color: #0074D9;
+  text-decoration: none;
+  margin: 0 0.5em;
+}
+
+.bottombar--left {
+  float: left;
+  font-size: 0.8em;
+}
+
+.bottombar--left--canvas-size {
+  float: left;
+}
+
+.bottombar--left--project-name {
+  float: left;
+}
+
+.bottombar--left--size {
+  width: 4em;
+  padding: 0.2em 0.4em;
+  margin: 0 0.3em;
+}
+
+.bottombar--right {
+  float: right;
+  padding-right: 1em;
+  font-size: 0.8em;
+}
+
+.bottombar a:hover {
+  border-bottom: 1px solid #0074D9;
+}
+
+.users--cursor {
+  position: absolute;
+  width: 11px;
+  height: 11px;
+  margin-top: -6px;
+  margin-left: -6px;
+}
+
+.users--cursor::before {
+  content: " ";
+  height: 1px;
+  width: 100%;
+  display: block;
+  background: red;
+  position: absolute;
+  top: 50%;
+  margin-top: -1px;
+  left: 0;
+}
+
+.users--cursor::after {
+  content: " ";
+  width: 1px;
+  height: 100%;
+  background: red;
+  display: block;
+  position: absolute;
+  left: 50%;
+  margin-left: -1px;
+  top: 0;
+}
+
+/*# sourceMappingURL=css.css.map*/

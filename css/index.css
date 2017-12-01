@@ -146,7 +146,7 @@ header {
   background: url("../images/header.jpg");
   background-position: center;
   background-size: cover;
-  padding: 14vh 14vh 3vh 14vh;
+  padding: 14vh;
 }
 header img {
   margin: 4vh;
@@ -163,7 +163,6 @@ header img {
 }
 header h2 {
   color: #fff;
-  margin-bottom: 2vh;
 }
 a {
   text-decoration: underline;
